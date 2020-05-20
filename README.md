@@ -1,9 +1,11 @@
-# lambda-twbot-connpass
+# Event News Bot
 
 Based on
 - [lambda_twbot](https://github.com/gkzz/lambda_twbot)
 
 ## TL;DR
+
+Tweet by AWS Lambda and Serverless Framework
 
 ```
 $ git clone https://github.com/gkzz/event-news-bot.git \
