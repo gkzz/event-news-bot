@@ -41,13 +41,13 @@ def _get_response(keyword, number_events):
 
     params = {
         'keyword': keyword,
-        'count': number_events,
+        'count': 20,
     }
     response = requests.get(BASE_URL, params=params)
     #return [{'title': r['title'], 'url': r['event_url']} for r in response.json()['events']]
 
     array = []
-    for r in response.json()['events']:
+    for r in random.sample(response.json()['events'], number_events):
         array.append({
             'title': r['title'], 'started_at': r['started_at'], 
             'event_url': r['event_url']
@@ -64,20 +64,24 @@ def tweet(event, context):
 
     try:
         token = _set_token()
-        response = _get_response(keyword='online', number_events=2)
+        response = _get_response(keyword='online', number_events=4)
 
 
         for resp in response:
             tw = """
-            イベント名：{title}
-            開始時間： {started_at}
-            {event_url}
+            イベント名：{title}\n開始時間： {started_at}\n{event_url}
             """.format(
                 title=resp['title'], started_at=resp['started_at'], 
                 event_url=resp['event_url']
             )
 
             token.update_status(tw)
+    except tweepy.TweepError as error:
+            print("""Tweet not successful. 
+            Reason: {r}
+            """.format(r=error.reason))
+
+    
     except:
         return traceback.format_exc()
     
@@ -87,4 +91,5 @@ def tweet(event, context):
 
 
 #if __name__ == "__main__":
+#    import pdb; pdb.set_trace()
 #    tweet('', '')
