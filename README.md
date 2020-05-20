@@ -1,7 +1,7 @@
 # lambda-twbot-connpass
 
 Based on
-- [twbot](https://github.com/gkzz/twbot)
+- [lambda_twbot](https://github.com/gkzz/lambda_twbot)
 
 ## TL;DR
 
@@ -26,7 +26,6 @@ $ serverless deploy
 ``` 
 $ tree -L 1
 .
-├── 38
 ├── LICENSE
 ├── node_modules
 ├── package.json
@@ -34,5 +33,5 @@ $ tree -L 1
 ├── README.md
 └── src
 
-3 directories, 4 files
+2 directories, 4 files
 ```
