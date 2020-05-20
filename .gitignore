@@ -1,0 +1,31 @@
+# general
+.
+..
+__pycache__
+*.pyc
+
+# python virtual env
+36
+37
+38
+
+# python
+src/handler.py
+
+# slv yaml
+src/serverless.yml
+
+# vscode
+.vscode
+
+
+# env
+.env
+*.env
+
+# node_modules
+node_modules
+
+# package.json
+package.json
+package-lock.json

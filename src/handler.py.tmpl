@@ -1,0 +1,90 @@
+# coding: UTF-8
+try:
+    import unzip_requirements
+except ImportError:
+    pass
+
+import tweepy
+import time
+import os
+import random
+import traceback
+import requests
+
+
+def _set_token():
+    """ set twitter token """
+
+    CK = os.environ['CONSUMER_KEY']
+    CS = os.environ['CONSUMER_SECRET']
+    AT = os.environ['ACCESS_TOKEN']
+    AS = os.environ['ACCESS_TOKEN_SECRET']
+
+    auth = tweepy.OAuthHandler(CK, CS)
+    auth.set_access_token(AT, AS)
+    return tweepy.API(auth)
+    
+
+
+def _get_response(keyword, number_events):
+    """ get response
+
+    Args:
+        keyword {type: string, default: online}: keyword to search events
+        number_events {type: int, default: 4}: number of events
+    
+    Returns:
+        content {type: list}: contents is list of some dict, which'keys are title and url
+
+    """
+    BASE_URL = 'https://connpass.com/api/v1/event/'
+
+    params = {
+        'keyword': keyword,
+        'count': number_events,
+    }
+    response = requests.get(BASE_URL, params=params)
+    #return [{'title': r['title'], 'url': r['event_url']} for r in response.json()['events']]
+
+    array = []
+    for r in response.json()['events']:
+        array.append({
+            'title': r['title'], 'started_at': r['started_at'], 
+            'event_url': r['event_url']
+        })
+    return array
+
+
+
+
+def tweet(event, context):
+    """ entry point of tweet """
+
+    respone = []
+
+    try:
+        token = _set_token()
+        response = _get_response(keyword='online', number_events=2)
+
+
+        for resp in response:
+            tw = """
+            イベント名：{title}
+            開始時間： {started_at}
+            {event_url}
+            """.format(
+                title=resp['title'], started_at=resp['started_at'], 
+                event_url=resp['event_url']
+            )
+
+            token.update_status(tw)
+    except:
+        return traceback.format_exc()
+    
+    return response
+
+
+
+
+#if __name__ == "__main__":
+#    tweet('', '')
