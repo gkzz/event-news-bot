@@ -41,7 +41,7 @@ def _get_response(keyword, number_events):
 
     params = {
         'keyword': keyword,
-        'count': 20,
+        'count': 30,
     }
     response = requests.get(BASE_URL, params=params)
     #return [{'title': r['title'], 'url': r['event_url']} for r in response.json()['events']]
@@ -76,6 +76,12 @@ def tweet(event, context):
             )
 
             token.update_status(tw)
+            
+            # Where sleep(10), sleep is measured in seconds.
+            # Change 10 to amount of seconds you want to have in-between retweets.
+            # Read Twitter's rules on automation. Don't spam!
+            time.sleep(random.randint(2,5))
+
     except tweepy.TweepError as error:
             print("""Tweet not successful. 
             Reason: {r}
