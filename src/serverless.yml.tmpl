@@ -24,6 +24,6 @@ functions:
   tweet:
     handler: handler.tweet  # $filename.$function(handler.pyのtweet関数を実行)
     memorySize: 128
-    timeout: 60s
+    timeout: 90s
     events:
       - schedule: cron(0/40 * * * ? *)  # 毎日40分おき
