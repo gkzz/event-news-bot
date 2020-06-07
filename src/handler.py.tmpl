@@ -26,8 +26,8 @@ def _set_token():
     
 
 
-def _get_response(keyword, number_events):
-    """ get response
+def _get_content(keyword, number_events):
+    """ get content
 
     Args:
         keyword {type: string, default: online}: keyword to search events
@@ -37,6 +37,7 @@ def _get_response(keyword, number_events):
         content {type: list}: contents is list of some dict, which'keys are title and url
 
     """
+
     BASE_URL = 'https://connpass.com/api/v1/event/'
 
     params = {
@@ -46,13 +47,13 @@ def _get_response(keyword, number_events):
     response = requests.get(BASE_URL, params=params)
     #return [{'title': r['title'], 'url': r['event_url']} for r in response.json()['events']]
 
-    array = []
+    content = []
     for r in random.sample(response.json()['events'], number_events):
-        array.append({
+        content.append({
             'title': r['title'], 'started_at': r['started_at'], 
             'event_url': r['event_url']
         })
-    return array
+    return content
 
 
 
@@ -64,7 +65,7 @@ def tweet(event, context):
 
     try:
         token = _set_token()
-        response = _get_response(keyword='online', number_events=2)
+        response = _get_content(keyword='online', number_events=2)
 
 
         for resp in response:
