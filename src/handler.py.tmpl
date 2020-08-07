@@ -11,6 +11,10 @@ import random
 import traceback
 import requests
 
+import logging
+logging.basicConfig(level = logging.INFO)
+logger = logging.getLogger()
+
 
 def _set_token():
     """ set twitter token """
@@ -65,7 +69,7 @@ def tweet(event, context):
 
     try:
         token = _set_token()
-        response = _get_content(keyword='online', number_events=2)
+        response = _get_content(keyword='online', number_events=3)
 
 
         for resp in response:
@@ -77,20 +81,19 @@ def tweet(event, context):
             )
 
             token.update_status(tw)
+            logger.info("The followig tweet succeeded: {tw}".format(tw=tw))
             
             # Where sleep(10), sleep is measured in seconds.
             # Change 10 to amount of seconds you want to have in-between retweets.
             # Read Twitter's rules on automation. Don't spam!
             time.sleep(random.randint(2,5))
 
-    except tweepy.TweepError as error:
-            print("""Tweet not successful. 
-            Reason: {r}
-            """.format(r=error.reason))
-
-    
-    except:
-        return traceback.format_exc()
+    except tweepy.TweepError as e:
+            logger.error(
+                "The followig tweet failed: {e}".format(e=e))
+    except Exception as e:
+        logger.error(
+                "Something wring: {e}".format(e=e))
     
     return response
 
